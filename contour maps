@@ -1,0 +1,28 @@
+%%-8bit
+D = imread("") ;
+contour(D,3);
+%G = imread("") ;
+%contour(G,3);
+%%
+%%screen 
+[row,col]= find(D<200);
+h = histogram2(row,col);
+h = histogram2(row,col,'DisplayStyle','tile','ShowEmptyBins','on');
+
+%%scatplot
+po = 2;
+method = 'squares';
+radius = [];
+N = [];
+n = [];
+ms = 5;
+x = row;
+y = col;
+%xlim([-100,600]);
+out = scatplot(x,y,method,radius,N,n,po,ms);
+
+%%contourf
+g = out.zif;  
+contour(g,10);
+xlim([-30,150]);
+ylim([-20,150]);
