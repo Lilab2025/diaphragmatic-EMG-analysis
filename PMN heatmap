@@ -1,0 +1,101 @@
+%% read
+SDKPATH = '';
+addpath(genpath(SDKPATH));
+data_TDT=TDTbin2mat('');
+diaphragm_L = data_TDT.streams.x1___.data;
+diaphragm_R = data_TDT.streams.x2___.data;
+%% F
+Fs_dia=3.051757812500000e+03;
+n1=1;
+n2=100;
+%% plot
+n_1 = 4;
+n_2 = 7;
+n_1_dia=n_1*Fs_dia;
+n_2_dia=n_2*Fs_dia;
+t_1_dia=(n_1_dia-1)/Fs_dia:1/Fs_dia:(n_2_dia-1)/Fs_dia;
+
+z_dia_L=(diaphragm_L-mean(diaphragm_L))./std(diaphragm_L);
+y_diaphragm_L=butterworth_filter(z_dia_L,Fs_dia,n1,n2,n_1,n_2,-10,10); % butterworth_filter
+z_dia_R=(diaphragm_R-mean(diaphragm_R))./std(diaphragm_R);
+y_diaphragm_R=butterworth_filter(z_dia_R,Fs_dia,n1,n2,n_1,n_2,-10,10); % butterworth_filter
+
+y_d_abs=abs(y1);
+figure(2)
+subplot(2,1,1);
+plot(t_1_dia,y_d_abs);
+%xlim([n_1,n_2]);
+%ylim([-10,10]);
+xlabel('Time(s)');
+ylabel('z-score');
+subplot(2,1,2);
+plot(t_1_dia,y_diaphragm_R(n_1_dia:n_2_dia),"k");
+ylim([-10,10]);
+
+%% root mean square(rms)
+enve_= envelope(y_d_abs,200,"rms");
+figure(3);
+plot(t_1_dia,enve_,"k",'linewidth',5);
+xlabel('Time(s)');
+
+A=enve_-min(enve_);
+plot(A);
+%% motor neurons 
+data_1 = readmatrix("");
+data_2 = readmatrix("");
+%% 
+M1= data_2(:,2);
+%A = y_d_abs;
+
+M1= data_2(:,2);
+S1= data_2(:,1);
+m1=length(M1(:));  
+i=2; 
+MA1=M1(1)*A(1,:);
+while i<=m1
+    MA1=cat(1,MA1,M1(i)*A(1,:));
+    i=i+1;
+end
+
+x = 1:1:6104;
+y = 1:1:88;
+[X,Y]=meshgrid(x,y); 
+figure(1);
+surf(X,Y,MA1,'edgecolor','none','LineStyle','none');
+%axis([0,6105,0,88]);
+%set(gca,'XTickLabel',{'1.22s','1.33s','1.44s','1.55s'});
+%set(gca,'XTick',0:113:339); 
+%set(gca,'YTick',0:10:100);
+%set(gca,'TickDir','out');
+
+colormap(wyxcolor3);
+colorbar;
+shading interp;
+title('heatmap'); 
+grid off;  
+view(0,90); 
+
+MA1 = double(MA1);
+xmax  = max(x);
+xmin  = min(x);
+ymax  = max(y);
+ymin  = min(y);
+N = 10000;
+[X,Y] = meshgrid(linspace(xmin,xmax,N),linspace(ymin,ymax,N));
+Z=griddata(x,y,MA1,X,Y);
+
+pcolor(X,Y,Z);
+imagesc(Z);
+%colormap(mycolor)
+%colormap(wyxcolor3);
+t=0:0:0;
+set(gca,"xtick",t); 
+set(gca,"ytick",t); 
+
+%level1 = {'0','1'};
+axes('position',[.1,.00,.40,.80]);
+axis off
+%hh = colorbar('horiz');
+colorbar("horiz","Ticks",[],"color","white");
+%hh.TickLabels = level1;
+%set(gca,"hh.tick",t);
