@@ -1,0 +1,43 @@
+%% plot + root mean square(rms)
+y1=z_1(n_1_dia:n_2_dia);
+y2=z_2(n_1_dia:n_2_dia);
+y3=z_3(n_1_dia:n_2_dia);
+y4=z_4(n_1_dia:n_2_dia);
+enve_3= envelope(y3,200,"rms");
+enve_4= envelope(y4,200,"rms");
+figure(1);
+subplot(2,1,1);
+plot(t_1_dia,enve_3,'linewidth',1.5);
+subplot(2,1,2);
+plot(t_1_dia,enve_4,'linewidth',1.5);
+%% find burst stim
+burst_3=find_burst_duration(enve_3,0.1,0.03*Fs_dia);%data;amplitude min;duration limit 
+burst_4=find_burst_duration(enve_4,0.1,0.03*Fs_dia);%data;amplitude min;duration limit 
+
+nor=[];
+for j =1:length(burst_3(:,1))
+    P = (burst_3(j,3)-burst_3(j,1));
+    L = (burst_4(j,1)-burst_3(j,1));
+    F = L/P;
+    nor=[nor;[L P F]];
+end
+
+
+%%compass
+a =xlsread('');
+polarscatter(a(:,1),a(:,2),400,'black','filled');%Radian,radius
+ax = gca;
+d = ax.ThetaDir;
+ax.ThetaDir = 'clockwise';
+ax.RLim = [0 1];
+ax.RTick = [ ];
+ax.ThetaTick = [0 90 180 270]
+ax.FontWeight = "bold"
+hold on
+polarscatter(a(:,3),a(:,4),400,'black');
+
+ps = compass(?,?)%X Y mean
+
+ps.yLim = [0 1];
+ax.RTick = [ ];
+ax.ThetaTick = [0 90 180 270]
