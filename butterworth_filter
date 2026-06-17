@@ -1,0 +1,39 @@
+function filtered_data=butterworth_filter_(data,Fs,time_1,time_2,xlim_1,xlim_2,ylim_1,ylim_2)
+doubleData = double(data);
+%Fourier Transform  
+Ts=1/Fs;
+time_1=time_1*Fs;
+time_2=time_2*Fs;
+t=(time_1-1)/Fs:1/Fs:(time_2-1)/Fs;
+y1=doubleData(time_1:time_2);
+y=fft(y1);
+filtered_data = (0:length(y)-1)*Fs/length(y);
+figure(2);
+plot(filtered_data, abs(y));
+xlabel("Frequency(Hz)")
+ylabel("Manitude")
+title('Spectrum map before filtered');
+%butterworth filter*6
+[b,a] =  butter(1,430*2/Fs,'high');
+emg = filtfilt(b,a,y1);
+[b,a] =  butter(1,500*2/Fs,'low');
+emg = filtfilt(b,a,emg);
+
+y=fft(emg);
+filtered_data = (0:length(y)-1)*Fs/length(y);
+figure(3);
+plot(filtered_data, abs(y));
+xlabel("Frequency(Hz)");
+ylabel("Manitude");
+title('Spectrum map after filtered');
+
+figure(4);
+t=(time_1-1)/Fs:1/Fs:(time_2-1)/Fs;
+z_filtered=(emg-mean(emg))./std(emg);
+filtered_data=z_filtered;
+plot(t,z_filtered)
+xlabel('Time(s)');
+ylabel('z-score');
+title('filtered data');
+xlim([xlim_1,xlim_2]);
+ylim([ylim_1,ylim_2]);
