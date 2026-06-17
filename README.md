@@ -1,3 +1,2 @@
-##matlab分析dEMG信号的处理代码
-##使用说明
-得到的dEMG数据标准化处理后，将数据导入，进行处理，可得到指定时间内的平均频率、幅值与持续时间
+##dEMG analysis
+##butterworth_filter and find_burst_duration are function
