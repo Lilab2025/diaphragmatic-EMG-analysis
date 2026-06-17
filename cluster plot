@@ -1,0 +1,24 @@
+library("readxl")
+data <- read_excel("")
+
+p<-  ggplot(data=data,aes(x=`fre_change-TV`,y=TV_change,color=sub))+
+  geom_point(size = 4.5,alpha = 0.7)+
+  scale_color_manual(values =  c("#666666","#8AB07D","#E46B90"))+
+  stat_ellipse(level = 0.3,geom = "polygon",aes(fill=sub),alpha = 0.2)+
+  theme_bw()+
+  theme(panel.grid.major=element_blank(),panel.grid.minor=element_blank()) +
+  scale_fill_manual(values = c("#666666","#8AB07D","#E46B90"))
+
+ p_square_panel <- p + theme(aspect.ratio = 1)
+ p_square_panel
+ 
+ ggplot(data=data,aes(x=fre_change,y=amplitude_sum,color=sub))+
+  geom_point(size = 3,alpha = 0.9)+
+   #scale_color_manual(values=rev(mycol))+
+   stat_ellipse(level = 0.5,geom = "polygon",aes(fill=sub),alpha = 0.2)+
+   theme_bw()+
+   theme(panel.grid.major=element_blank(),panel.grid.minor=element_blank()) +
+  scale_fill_manual(values = c("#666666","#8AB07D","#E46B90"))
+
+p9<-p+scale_fill_manual(values=rev(mycol))+
+  scale_color_manual(values=rev(mycol))
