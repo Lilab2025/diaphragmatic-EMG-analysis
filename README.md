@@ -1,3 +1,4 @@
+## These codes were used to analyze the EMG datasets and other data deposited in Zenodo (10.5281/zenodo.20841734).
 ##dEMG Analysis
 Reads and normalizes raw diaphragm EMG (dEMG) recordings, then extracts respiratory parameters including burst frequency, burst duration, and burst amplitude using the dEMG_analysis pipeline. The functions butterworth_filter and find_burst_duration are called internally for signal filtering and burst detection.
 ##Contour Maps
