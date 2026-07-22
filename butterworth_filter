@@ -14,10 +14,10 @@ xlabel("Frequency(Hz)")
 ylabel("Manitude")
 title('Spectrum map before filtered');
 %butterworth filter*6
-[b,a] =  butter(1,430*2/Fs,'high');
+[b,a] = butter(1, ...
+    [100 1000]/(Fs/2), ...
+    'bandpass');
 emg = filtfilt(b,a,y1);
-[b,a] =  butter(1,500*2/Fs,'low');
-emg = filtfilt(b,a,emg);
 
 y=fft(emg);
 filtered_data = (0:length(y)-1)*Fs/length(y);
